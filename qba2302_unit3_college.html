@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QBA 2302 · Unit 3 Practice Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#154734; --green-deep:#0d3324; --gold:#FFB81C; --gold-soft:#FFF1CC;
+    --paper:#F7F4EC; --ink:#1C1B18; --ink-soft:#55524A; --line:#DCD6C4;
+    --wrong:#A83E2C; --wrong-soft:#FBEAE5; --right:#2F6B44; --right-soft:#E6F2EA; --card:#FFFFFF;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;min-height:100vh;background-color:var(--paper);
+    background-image:
+      repeating-linear-gradient(0deg,rgba(21,71,52,.05) 0,rgba(21,71,52,.05) 1px,transparent 1px,transparent 28px),
+      repeating-linear-gradient(90deg,rgba(21,71,52,.05) 0,rgba(21,71,52,.05) 1px,transparent 1px,transparent 28px);
+    color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.45;
+    display:flex;justify-content:center;padding:24px 14px 70px;
+  }
+  .wrap{width:100%;max-width:660px}
+  header{margin-bottom:18px}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--green);letter-spacing:.02em;margin-bottom:6px}
+  h1{font-family:'Lora',serif;font-weight:600;font-size:26px;margin:0 0 4px;color:var(--green-deep)}
+  .sub{color:var(--ink-soft);font-size:14.5px;margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 22px -14px rgba(21,71,52,.35)}
+  .hidden{display:none!important}
+  h2{font-family:'Lora',serif;font-size:19px;margin:0 0 10px;color:var(--green-deep)}
+  .muted{color:var(--ink-soft);font-size:14px}
+  a{color:var(--green)}
+
+  /* intro */
+  .opt{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;cursor:pointer;background:#fff}
+  .opt input{margin-top:4px;accent-color:var(--green);width:18px;height:18px;flex:none}
+  .opt.sel{border-color:var(--green);background:#F2F8F4}
+  .opt b{display:block;font-size:15.5px}
+  .opt span{font-size:13.5px;color:var(--ink-soft)}
+  select.partsel{width:100%;margin-top:8px;font-size:15px;padding:9px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-family:inherit}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 2px 4px;font-size:15px}
+  .switch{position:relative;width:46px;height:26px;flex:none}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#CFC9B6;border-radius:26px;transition:.2s;cursor:pointer}
+  .slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked + .slider{background:var(--green)}
+  .switch input:checked + .slider:before{transform:translateX(20px)}
+  .note{background:var(--gold-soft);border:1px solid #F0D58A;border-radius:10px;padding:10px 12px;font-size:14px;margin:14px 0 4px}
+
+  button{font-family:inherit;font-size:16px;font-weight:600;border-radius:11px;padding:13px 18px;border:1.5px solid var(--green);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:active{background:var(--green-deep)}
+  .btn-ghost{background:#fff;color:var(--green)}
+  .btn-gold{background:var(--gold);border-color:#D99A00;color:#2A2200}
+  .btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .btn-row button{flex:1 1 140px}
+  .big{width:100%;margin-top:14px}
+
+  /* bubbles */
+  .bubbles{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+  .bub{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:#fff;font:600 12px 'IBM Plex Mono',monospace;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+  .bub.cur{box-shadow:0 0 0 3px rgba(21,71,52,.25);border-color:var(--green);color:var(--green)}
+  .bub.full{background:var(--right);border-color:var(--right);color:#fff}
+  .bub.part{background:var(--gold);border-color:#D99A00;color:#2A2200}
+  .bub.zero{background:var(--wrong);border-color:var(--wrong);color:#fff}
+  .bub.skip{border:2px dashed #D99A00;background:var(--gold-soft);color:#7A5600}
+  .qtop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+  .tag{font:600 11.5px 'IBM Plex Mono',monospace;color:var(--green);background:#EAF3EE;border-radius:6px;padding:4px 8px;letter-spacing:.02em;text-transform:uppercase}
+  .counter{font:500 12.5px 'IBM Plex Mono',monospace;color:var(--ink-soft)}
+  .qtitle{font-family:'Lora',serif;font-size:19px;font-weight:600;margin:2px 0 8px;color:var(--green-deep)}
+  .qbody{font-size:16px;margin:0 0 10px}
+  .qbody p{margin:0 0 8px}
+  .qbody ul{margin:0 0 8px 18px;padding:0}
+  table.data{border-collapse:collapse;margin:8px 0 12px;font-size:14.5px;width:auto;max-width:100%}
+  table.data th,table.data td{border:1px solid var(--line);padding:6px 11px;text-align:center}
+  table.data th{background:#EAF3EE;color:var(--green-deep);font-weight:600}
+  table.data td:first-child,table.data th:first-child{text-align:left}
+  .hint{font-size:13.5px;color:var(--ink-soft);background:#F4F1E7;border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+
+  .item{border-top:1px solid var(--line);padding:12px 0 10px}
+  .item:first-of-type{border-top:none}
+  .item .lab{display:flex;gap:10px;align-items:flex-start}
+  .letter{flex:none;width:24px;height:24px;border-radius:6px;background:var(--green);color:#fff;font:600 12.5px 'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .item .txt{flex:1;font-size:15.5px}
+  .inwrap{margin:8px 0 0 34px}
+  input.num{width:100%;max-width:240px;font:500 17px 'IBM Plex Mono',monospace;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+  input.num:focus,select.pick:focus,.partsel:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(21,71,52,.15)}
+  select.pick{width:100%;font-size:15.5px;padding:10px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-family:inherit;color:var(--ink)}
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg label{flex:1 1 120px;border:1.5px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;gap:8px;align-items:center;background:#fff;font-size:15px}
+  .seg input{accent-color:var(--green);width:17px;height:17px}
+  .seg label.on{border-color:var(--green);background:#F2F8F4}
+  .chk{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer;background:#fff;font-size:15.5px}
+  .chk input{margin-top:3px;accent-color:var(--green);width:18px;height:18px;flex:none}
+  .chk.on{border-color:var(--green);background:#F2F8F4}
+  .fb{margin:8px 0 0 34px;font-size:14.5px;border-radius:9px;padding:8px 10px}
+  .fb.ok{background:var(--right-soft);color:#1D4A2E}
+  .fb.bad{background:var(--wrong-soft);color:#7C2B1E}
+  .fb .how{display:block;margin-top:4px;color:var(--ink-soft);font-size:13.5px}
+  .fb code,.how code{font-family:'IBM Plex Mono',monospace;font-size:13px;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:5px;word-break:break-word}
+  .locked input.num,.locked select.pick{background:#F7F5EE}
+  .scorebar{margin:12px 0 0;padding:10px 12px;border-radius:10px;font-weight:600;font-size:15px}
+  .scorebar.full{background:var(--right-soft);color:#1D4A2E}
+  .scorebar.part{background:var(--gold-soft);color:#6B4A00}
+  .scorebar.zero{background:var(--wrong-soft);color:#7C2B1E}
+
+  /* results */
+  .bigscore{font-family:'Lora',serif;font-size:46px;font-weight:600;color:var(--green-deep);margin:4px 0 0;line-height:1.05}
+  .pct{font:600 15px 'IBM Plex Mono',monospace;color:var(--ink-soft)}
+  .topic-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+  .topic-row:first-of-type{border-top:none}
+  .pill{font:600 12px 'IBM Plex Mono',monospace;background:var(--wrong-soft);color:#7C2B1E;border-radius:999px;padding:3px 9px;white-space:nowrap;align-self:center}
+  details.rev{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#fff}
+  details.rev summary{padding:10px 12px;cursor:pointer;font-weight:600;font-size:15px}
+  details.rev .inner{padding:2px 12px 12px;font-size:14.5px}
+  .revline{border-top:1px dashed var(--line);padding:8px 0}
+  .revline .you{color:var(--wrong)}
+  .revline .corr{color:var(--right);font-weight:600}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(13,51,36,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .modal .box{background:#fff;border-radius:14px;padding:20px;max-width:380px;width:100%}
+  .modal h3{margin:0 0 6px;font-family:'Lora',serif;color:var(--green-deep)}
+  footer{margin-top:20px;font-size:12.5px;color:var(--ink-soft);text-align:center}
+  .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:4px;margin:8px 0 6px;font-size:14px}
+  .dgrid span{background:#F7F4EC;border:1px solid var(--line);border-radius:6px;padding:4px 0;text-align:center;font-variant-numeric:tabular-nums}
+  .copybtn{font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:9px;background:#fff;color:var(--green);margin:0 0 10px}
+  .seg.long label{flex:1 1 100%;align-items:flex-start;line-height:1.35}
+  .seg.long input{margin-top:3px;flex:none}
+  details.ref{margin:12px 0 2px;font-size:14px}
+  details.ref summary{cursor:pointer;font-weight:600;color:var(--green)}
+  details.ref ul{margin:8px 0 0;padding-left:20px;color:var(--ink-soft)}
+  details.ref code{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--green-deep)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">QBA 2302 · BUSINESS STATISTICS</div>
+    <h1>Unit 3 Practice Exam</h1>
+    <p class="sub">Sampling, confidence intervals, and sample size, with scenarios from college life. New numbers every attempt.</p>
+  </header>
+
+  <!-- INTRO -->
+  <section id="intro" class="card">
+    <h2>Before you start</h2>
+    <div class="note">Have <b>Excel</b> and your <b>Unit 3 formula sheet</b> open, just like on the real exam.
+      <a id="fslink" href="Unit_3_formula_sheet.pdf" target="_blank" rel="noopener">Open the formula sheet</a>. Questions with data have a <b>Copy data</b> button so you can paste it straight into Excel.</div>
+    <label class="opt sel" id="optFull">
+      <input type="radio" name="mode" value="full" checked>
+      <div><b>Full practice exam</b><span>15 questions drawn from every part, with fresh numbers each time.</span></div>
+    </label>
+    <label class="opt" id="optPart">
+      <input type="radio" name="mode" value="part">
+      <div><b>Practice one part</b><span>Drill a single topic area as many times as you like.</span>
+        <select id="partSel" class="partsel"></select></div>
+    </label>
+    <div class="toggle"><span>Shuffle question order</span>
+      <label class="switch"><input type="checkbox" id="shuf"><span class="slider"></span></label></div>
+    <button class="btn-primary big" id="startBtn">Start</button>
+    <p class="muted" style="margin:14px 0 0">Enter probabilities and proportions as decimals (like .3150). Percentages like 6.93% are fine too. Tap <b>Check answer</b> to see how Excel gets it. You get partial credit for each part you get right. No login, nothing personal is collected.</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="bubbles" id="bubbles"></div>
+    <div class="card">
+      <div class="qtop"><span class="tag" id="qtag"></span><span class="counter" id="qcount"></span></div>
+      <div class="qtitle" id="qtitle"></div>
+      <div class="qbody" id="qbody"></div>
+      <div id="items"></div>
+      <div id="scorebar"></div>
+      <div class="btn-row" id="qbtns"></div>
+    </div>
+    <p style="text-align:center;margin:14px 0 0"><button class="btn-ghost" id="finishEarly" style="padding:9px 16px;font-size:14px;font-weight:600">Finish and see results</button></p>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hidden"></section>
+  <footer>Practice only. Your instructor's exam will use different questions.</footer>
+</div>
+<div id="modal" class="modal hidden"><div class="box" id="modalBox"></div></div>
+
+<script>
+/* ============================================================
+   MATH
+   ============================================================ */
+const M = {
+  cdf(x){
+    const a = Math.abs(x); let c;
+    if (a > 37) c = 0;
+    else {
+      const e = Math.exp(-a*a/2);
+      if (a < 7.07106781186547){
+        let b = 3.52624965998911E-02*a + 0.700383064443688;
+        b = b*a + 6.37396220353165; b = b*a + 33.912866078383; b = b*a + 112.079291497871;
+        b = b*a + 221.213596169931; b = b*a + 220.206867912376;
+        c = e*b;
+        let d = 8.83883476483184E-02*a + 1.75566716318264;
+        d = d*a + 16.064177579207; d = d*a + 86.7807322029461; d = d*a + 296.564248779674;
+        d = d*a + 637.333633378831; d = d*a + 793.826512519948; d = d*a + 440.413735824752;
+        c = c/d;
+      } else {
+        let b = a + 0.65; b = a + 4/b; b = a + 3/b; b = a + 2/b; b = a + 1/b;
+        c = e/b/2.506628274631;
+      }
+    }
+    return x > 0 ? 1 - c : c;
+  },
+  inv(p){
+    const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+    const b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
+    const c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+    const d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
+    const pl=0.02425, ph=1-pl; let x;
+    if (p < pl){ const q=Math.sqrt(-2*Math.log(p)); x=(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+    else if (p <= ph){ const q=p-0.5, r=q*q; x=(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1); }
+    else { const q=Math.sqrt(-2*Math.log(1-p)); x=-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+    const e = M.cdf(x) - p, u = e*Math.sqrt(2*Math.PI)*Math.exp(x*x/2);
+    return x - u/(1 + x*u/2);
+  },
+  comb(n,k){ if(k<0||k>n) return 0; k=Math.min(k,n-k); let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); },
+  perm(n,k){ let r=1; for(let i=0;i<k;i++) r*=(n-i); return r; },
+  bpmf(n,p,k){ if(k<0||k>n) return 0; return M.comb(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k); },
+  bcdf(n,p,k){ let s=0; for(let i=0;i<=k;i++) s+=M.bpmf(n,p,i); return Math.min(1,s); },
+  binv(n,p,q){ let s=0; for(let k=0;k<=n;k++){ s+=M.bpmf(n,p,k); if(s>=q-1e-12) return k; } return n; }
+};
+
+/* Student t helpers (added to M) */
+function lgam(x){ const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5]; let y=x, t=x+5.5; t-=(x+0.5)*Math.log(t); let s=1.000000000190015; for(let j=0;j<6;j++) s+=c[j]/++y; return -t+Math.log(2.5066282746310005*s/x); }
+function betacf(a,b,x){ const MAXIT=300, EPS=3e-16, FPMIN=1e-300; let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap; if(Math.abs(d)<FPMIN)d=FPMIN; d=1/d; let h=d;
+  for(let m=1;m<=MAXIT;m++){ const m2=2*m; let aa=m*(b-m)*x/((qam+m2)*(a+m2)); d=1+aa*d; if(Math.abs(d)<FPMIN)d=FPMIN; c=1+aa/c; if(Math.abs(c)<FPMIN)c=FPMIN; d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2)); d=1+aa*d; if(Math.abs(d)<FPMIN)d=FPMIN; c=1+aa/c; if(Math.abs(c)<FPMIN)c=FPMIN; d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<EPS) break; } return h; }
+function ibeta(a,b,x){ if(x<=0) return 0; if(x>=1) return 1; const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x)); return x<(a+1)/(a+b+2) ? bt*betacf(a,b,x)/a : 1-bt*betacf(b,a,1-x)/b; }
+M.tcdf=(t,df)=>{ const x=df/(df+t*t), p=0.5*ibeta(df/2,0.5,x); return t>0?1-p:p; };
+M.tinv2=(alpha,df)=>{ let lo=0, hi=1000; for(let i=0;i<200;i++){ const mid=(lo+hi)/2; if(2*(1-M.tcdf(mid,df))>alpha) lo=mid; else hi=mid; } return (lo+hi)/2; };
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const rnd = (a,b)=> a + Math.floor(Math.random()*(b-a+1));
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+const shuffle = arr => { const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const sample = (arr,n)=> shuffle(arr).slice(0,n);
+const fp = x => (+x).toFixed(2).replace(/^0\./,'.').replace(/^-0\./,'-.');   // .70
+const f4 = x => (+x).toFixed(4);
+const f2 = x => (+x).toFixed(2);
+const nf = x => Number(x).toLocaleString('en-US');
+const pctS = x => (x*100).toFixed(2);
+const clean = x => +(+x).toFixed(10);   // trims float noise for display
+const PR  = {abs:0.0006};                // ordinary probability
+const PRZ = {abs:0.002};                 // normal-curve probability (students may round z)
+const SM  = {abs:0.0002, rel:0.03};      // tiny probabilities
+const INT = {abs:0.001};
+const CNT = {abs:0.75};                  // expected counts (rounding)
+
+function parseNum(s){
+  s = String(s==null?'':s).trim().replace(/,/g,'').replace(/\$/g,'').replace(/−/g,'-').replace(/\s+/g,'');
+  if(!s) return NaN;
+  let pct=false; if(s.endsWith('%')){ pct=true; s=s.slice(0,-1); }
+  let v;
+  if (s.includes('/')){ const [a,b]=s.split('/'); v = (a===''||b==='') ? NaN : parseFloat(a)/parseFloat(b); if(!/^-?[\d.]+\/[\d.]+$/.test(s)) v=NaN; }
+  else v = /^-?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s) ? Number(s) : NaN;
+  return pct ? v/100 : v;
+}
+function numOK(v, ans, tol){ if(!isFinite(v)) return false; return Math.abs(v-ans) <= Math.max(tol.abs||0, (tol.rel||0)*Math.abs(ans)); }
+
+/* item constructors */
+const N  = (label,text,ans,o={}) => ({type:'num',label,text,ans,tol:o.tol||PR,dp:o.dp==null?4:o.dp,how:o.how||'',neg:!!o.neg,unit:o.unit||'',pct:!!o.pct});
+const CH = (label,text,choices,ansIdx,o={}) => ({type:'choice',label,text,choices,ans:ansIdx,how:o.how||''});
+
+/* ============================================================
+   THEME
+   ============================================================ */
+const THEME = {
+  means:[
+    {title:'Study Habits', org:'The Student Success Center', est:'the average number of hours a student studies each week', sample:'students', one:'student', rec:'weekly study hours', pop:'all students at the university', avg:'average weekly study time', unit:'hours', dp:1, mu:[11,12,13,14], sd:[3,4,5], E:[0.5,0.75,1]},
+    {title:'Commuting', org:'Parking and Transportation Services', est:'the average time it takes a commuter student to get to campus', sample:'commuter students', one:'commuter student', rec:'minutes of travel time', pop:'all commuter students', avg:'average commute time', unit:'minutes', dp:0, mu:[18,22,25,30], sd:[5,6,8], E:[1,1.5,2]},
+    {title:'Food Spending', org:'Campus Dining', est:'the average amount a student spends on food each week', sample:'students', one:'student', rec:'weekly food spending', pop:'all students', avg:'average weekly food spending', unit:'dollars', dp:2, mu:[55,60,65,70], sd:[12,15,18], E:[2,3,4]},
+    {title:'Sleep', org:'The Wellness Center', est:'the average number of hours a student sleeps on a school night', sample:'students', one:'student', rec:'hours of sleep', pop:'all students', avg:'average nightly sleep', unit:'hours', dp:1, mu:[6.4,6.8,7,7.2], sd:[1,1.2,1.4], E:[0.2,0.25,0.3]}],
+  props:[
+    {title:'Dining Survey', org:'Campus Dining', sample:'students', one:'student', pop:'all students', act:'would use a mobile ordering app'},
+    {title:'Transit Poll', org:'Parking and Transportation Services', sample:'students', one:'student', pop:'all students', act:'would ride a new evening shuttle'},
+    {title:'Wellness Poll', org:'The Wellness Center', sample:'students', one:'student', pop:'all students', act:'would attend a weekly free yoga class'},
+    {title:'Library Survey', org:'The University Library', sample:'students', one:'student', pop:'all students', act:'would use extended weekend hours'}],
+  strata:[
+    {title:'Survey Planning', org:'The Office of Student Life', noun:'students', groups:['students with a GPA below 2.5','students with a GPA of 2.5 to 3.4','students with a GPA of 3.5 or higher']},
+    {title:'Enrollment Sampling', org:'The Registrar', noun:'students', groups:['students taking under 12 credit hours','students taking 12 to 15 credit hours','students taking over 15 credit hours']}],
+  methods:{
+    sys:['A survey team asks every {k}th student who walks into the library about study habits.','The registrar emails a survey to every {k}th student on the alphabetized enrollment list.','Dining staff ask every {k}th student who swipes into the dining hall about the menu.'],
+    conv:['A student reporter interviews the students who happen to be sitting in the student union at lunch.','A professor surveys only the students in her own 8 am class about campus parking.','A club asks the friends in its group chat which snacks to buy for the social.'],
+    srs:['The registrar uses a random number generator to select {m} students from the full enrollment list for a survey.','Student Life draws {m} names at random from a list of all students to win free concert tickets.','A researcher numbers every student in a residence hall and uses a random number generator to pick {m} of them.'],
+    strat:['Students are grouped by GPA range (below 2.5, 2.5 to 3.4, 3.5 and above) and a proportional random sample is taken from within each GPA range.','Researchers group students by weekly study hours (under 10, 10 to 20, over 20) and randomly sample from within each group.','Housing groups students by number of credit hours (under 12, 12 to 15, over 15) and randomly selects students from within each group.']}
+};
+
+/* ============================================================
+   QUESTION TEMPLATES (Unit 3)
+   Each build() returns a fresh randomized question.
+   ============================================================ */
+const PARTS = {
+  1:'Sampling and concepts', 2:'Sampling distribution of the mean', 3:'Confidence interval for a mean (σ known)',
+  4:'Confidence interval for a mean (σ unknown)', 5:'Confidence interval for a proportion', 6:'Sample size',
+  7:'Choosing the procedure'
+};
+const TEMPLATES = [];
+const def = (id,part,topic,build)=> TEMPLATES.push({id,part,topic,build});
+const MC = THEME.means, PCX = THEME.props;
+
+/* ---------- helpers ---------- */
+const gauss = ()=>{ let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
+const mean = a => a.reduce((s,v)=>s+v,0)/a.length;
+const sdS  = a => { const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)*(v-m),0)/(a.length-1)); };
+const rd   = (x,dp)=> +(+x).toFixed(dp);
+const genData = (n,c,center,sd)=> Array.from({length:n},()=>Math.max(0,rd(center+sd*gauss(),c.dp)));
+const dd   = c => c.dp===0 ? 1 : 2;                      // decimals shown in results
+const vtxt = (c,x,d)=>{ d=(d==null)?dd(c):d; return c.unit==='dollars' ? '$'+(+x).toFixed(d) : (+x).toFixed(d)+' '+c.unit; };
+const vin  = (c,x)=> vtxt(c,x,c.dp);                      // precision of the raw data
+const mTxt = (c,x)=>{ const v=+(+x).toFixed(3), t=String(v); if(c.unit==='dollars') return '$'+(Number.isInteger(v)?t:v.toFixed(2)); const u = v===1 && /s$/.test(c.unit) && c.unit!=='mph' ? c.unit.slice(0,-1) : c.unit; return t+' '+u; };
+const orgL = o => o.startsWith('The ') ? 'the '+o.slice(4) : o;
+const f3 = x => (+x).toFixed(3);
+const CONFS = [.90,.95,.99];
+const cp = c => Math.round(c*100);
+const al = c => +(1-c).toFixed(2);
+const zExact = c => M.inv(1-(1-c)/2);
+const zc = c => ({90:1.645,95:1.96,99:2.576})[cp(c)];   // critical values from the formula sheet
+const tc = (c,df) => M.tinv2(1-c,df);
+const tolV = a => ({abs:0.01+0.004*Math.abs(a)});
+const tolEnd = (moe)=> ({abs:0.01+0.012*moe});
+const PRZ2 = {abs:0.0015, rel:0.02};
+const tolSE = se => ({abs:0.003+0.01*se});
+const fmtPct = x => (x*100).toFixed(1)+'%';
+const dataOf = (c,arr)=> arr.map(v=>v.toFixed(c.dp));
+const letters = 'ABCDE';
+function mkChoices(correct, wrong){
+  const all = shuffle([correct,...wrong]);
+  return { choices: all.map((t,i)=>`${letters[i]}) ${t}`), ans: all.indexOf(correct) };
+}
+/* sample size that is stable no matter how a student rounds z */
+function safeSize(calc, conf){
+  const zs = [zc(conf), zExact(conf), +zExact(conf).toFixed(2)];
+  const raws = zs.map(calc);
+  const cs = raws.map(Math.ceil);
+  const frac = raws[0]-Math.floor(raws[0]);
+  return cs.every(x=>x===cs[0]) && frac>0.03 && frac<0.97 && raws[0]>5;
+}
+function ctxMean(){ return pick(MC); }
+function ctxProp(){ return pick(PCX); }
+
+/* interpretation statements */
+function interpMean(c,conf,lo,hi,xb){
+  const C=cp(conf), L=vtxt(c,lo), H=vtxt(c,hi), X=vtxt(c,xb);
+  return mkChoices(
+    `I am ${C}% confident that the ${c.avg} for ${c.pop} is between ${L} and ${H}.`,
+    [`Because this is only a sample, it is not possible to say anything about ${c.pop}.`,
+     `${C}% of individual ${c.sample} have a value between ${L} and ${H}.`,
+     `I am ${C}% confident that the ${c.avg} for ${c.pop} is exactly ${X}.`,
+     `There is a ${C}% probability that the next sample will have a mean between ${L} and ${H}.`]);
+}
+function interpProp(c,conf,lo,hi,ph){
+  const C=cp(conf), L=fmtPct(lo), H=fmtPct(hi), P=fmtPct(ph);
+  return mkChoices(
+    `I am ${C}% confident that the proportion of ${c.pop} who ${c.act} is between ${L} and ${H}.`,
+    [`Because this is only a sample, it is not possible to say anything about ${c.pop}.`,
+     `I am ${C}% confident that exactly ${P} of ${c.pop} ${c.act}.`,
+     `Between ${L} and ${H} of the ${c.sample} in this sample ${c.act}.`,
+     `${C}% of ${c.pop} ${c.act}.`]);
+}
+function dataHTMLNote(){ return 'Copy the data into Excel (use the button), then answer.'; }
+
+/* ---------- PART 1: SAMPLING AND CONCEPTS ---------- */
+const METHODS = ['Simple Random Sampling','Systematic Random Sampling','Stratified Random Sampling','Convenience Sampling'];
+def('s_methods',1,'Types of sampling',()=>{
+  const kk = ()=>pick([10,15,20,25,40,50,100]);
+  const fill = s => s.replace(/\{k\}/g,()=>kk()).replace(/\{m\}/g,()=>pick([30,40,50,60,100]));
+  const M_ = THEME.methods;
+  const rows = shuffle([
+    {text:fill(pick(M_.srs)),   ans:METHODS[0], how:'Every member of the population has an equal chance, picked with random numbers.'},
+    {text:fill(pick(M_.sys)),   ans:METHODS[1], how:'Pick every kth member from an ordered list or line.'},
+    {text:fill(pick(M_.strat)), ans:METHODS[2], how:'Break the population into quantitative strata (ranges of a number), then randomly sample from within each stratum.'},
+    {text:fill(pick(M_.conv)),  ans:METHODS[3], how:'Uses whoever is easiest to reach, so it is not random.'}]);
+  return {kind:'match',title:'Match the Scenarios with the Terms',
+    intro:'Match each scenario to the best term.', rows, bank:shuffle(METHODS.slice())};
+});
+
+def('s_concepts',1,'Statistical vocabulary for estimation',()=>{
+  const c=ctxMean(), n=pick([40,50,64,100]), mu=pick(c.mu), sd=pick(c.sd), C=pick(CONFS);
+  const xb=rd(mu+pick([-1,1])*pick([.3,.5,.8])*sd/Math.sqrt(n)*3,c.dp===0?1:2);
+  const T=['Point Estimate','Population Parameter','Sampling Error','Standard Error','Margin of Error','Confidence Level'];
+  const defs={
+    'Point Estimate':{text:`A sample of ${n} ${c.sample} has an average of ${vtxt(c,xb)}, and this single number is used to estimate the ${c.avg} for ${c.pop}.`,how:'A single sample statistic used to estimate the population value.'},
+    'Population Parameter':{text:`The true ${c.avg} for ${c.pop}, which is usually unknown.`,how:'A fixed number that describes the whole population.'},
+    'Sampling Error':{text:`The difference between a sample mean of ${vtxt(c,xb)} and the true population mean of ${vtxt(c,mu)}.`,how:'Sample mean minus population mean.'},
+    'Standard Error':{text:`The standard deviation of the sample mean, found by dividing the population standard deviation by the square root of the sample size.`,how:'σ / √n.'},
+    'Margin of Error':{text:`The amount that is added to and subtracted from the sample mean to build the interval.`,how:'Critical value times the standard error.'},
+    'Confidence Level':{text:`The "${cp(C)}%" in the statement "I am ${cp(C)}% confident that the interval captures the true average."`,how:'How much confidence the interval method gives you.'}};
+  const chosen = sample(T,5);
+  const rows = shuffle(chosen.map(t=>({text:defs[t].text,ans:t,how:defs[t].how})));
+  return {kind:'match',title:'Match the Terms with the Examples',
+    intro:'Match each example to the best term. Some choices will not be used.',
+    rows, bank:shuffle([...T,'Critical Value'])};
+});
+
+def('s_multi',1,'Interpreting estimation statements',()=>{
+  const c=ctxMean(), C=pick(['95','99']);
+  const pool=[
+    {text:`If the sample size increases and everything else stays the same, the margin of error gets smaller.`,ans:true,how:'The standard error σ/√n shrinks as n grows.'},
+    {text:`Raising the confidence level from 95% to 99% makes the interval wider.`,ans:true,how:'A higher confidence level needs a larger critical value.'},
+    {text:`A ${C}% confidence interval for the mean contains ${C}% of the individual ${c.sample} in the population.`,ans:false,how:'The interval is about the population mean, not about individual values.'},
+    {text:`The population mean changes from sample to sample, which is why the interval changes.`,ans:false,how:'The sample mean changes. The population mean is fixed.'},
+    {text:`When σ is unknown, the t critical value is larger than the z critical value for the same confidence level.`,ans:true,how:'The t distribution has heavier tails, so its critical value is larger.'},
+    {text:`Using p = .5 in the sample size formula for a proportion gives the largest sample size.`,ans:true,how:'p(1 − p) is largest at .5, so it is the most conservative choice.'},
+    {text:`The standard error gets larger as the sample size increases.`,ans:false,how:'The standard error gets smaller as n increases.'},
+    {text:`The sample mean is exactly in the middle of its confidence interval.`,ans:true,how:'The interval is the sample mean plus and minus the margin of error.'},
+    {text:`If the standard deviation is larger, you need a larger sample to reach the same margin of error.`,ans:true,how:'n = (zσ/E)², so n grows with σ.'},
+    {text:`To cut the margin of error in half, you only need to double the sample size.`,ans:false,how:'You need four times the sample size to cut the margin of error in half.'},
+    {text:`If the population is not normally distributed, the sampling distribution of the sample mean approaches a normal distribution when the sample size is at least 30.`,ans:true,how:'This is the Central Limit Theorem.'},
+    {text:`The standard error is larger than the population standard deviation.`,ans:false,how:'σ/√n is smaller than σ, and it keeps shrinking as n grows.'},
+    {text:`Convenience sampling gives every member of the population the same chance of being included.`,ans:false,how:'Convenience sampling uses whoever is easiest to reach, so it is not random.'},
+    {text:`Sampling error is found by subtracting the population mean from the sample mean.`,ans:true,how:'Sampling error = x̄ − μ.'},
+    {text:`A random sample is what allows us to generalize the interval to the whole population.`,ans:true,how:'Random selection makes the sample representative of the population.'}];
+  const T=shuffle(pool.filter(o=>o.ans)).slice(0,3), F=shuffle(pool.filter(o=>!o.ans)).slice(0,3);
+  return {kind:'multi',title:'Choose All That Apply',
+    intro:'Select every statement that is correct.', options:shuffle([...T,...F])};
+});
+
+def('s_calc',1,'Sampling calculations',()=>{
+  const sc=pick(THEME.strata), noun=sc.noun;
+  const k=pick([5,8,10,12,20,25]), nsys=pick([40,50,60,80,100]), Nsys=k*nsys;
+  const sizes=pick([[200,300,500],[100,400,500],[300,300,400],[250,250,500],[100,300,600]]), T=sizes.reduce((a,b)=>a+b,0), m=pick([50,100,200]);
+  const share=sizes.map(x=>x/T*m); const g1=0,g3=2;
+  const Np=pick([12,14,15,16,18,20,24,25]), np=pick([3,4,5]);
+  return {kind:'parts',title:sc.title,
+    intro:`${sc.org} is planning several surveys of ${noun}.`,
+    items:[
+     N('A',`For one survey, ${orgL(sc.org)} has an ordered list of ${Nsys} ${noun} and wants a systematic sample of ${nsys}. What is k?`,k,{tol:INT,dp:0,how:`k = total population size / desired sample size = ${Nsys} / ${nsys} = ${k}`}),
+     N('B',`For another survey, the ${T} ${noun} are split into three groups: ${sc.groups[0]} (${sizes[0]}), ${sc.groups[1]} (${sizes[1]}), and ${sc.groups[2]} (${sizes[2]}). A stratified sample of ${m} will be taken in proportion to group size. How many should come from the ${sc.groups[0]}?`,share[g1],{tol:INT,dp:0,how:`(${sizes[0]} / ${T}) × ${m} = ${share[g1]}`}),
+     N('C',`How many should come from the ${sc.groups[2]}?`,share[g3],{tol:INT,dp:0,how:`(${sizes[2]} / ${T}) × ${m} = ${share[g3]}`}),
+     N('D',`If you took every possible sample of ${np} from a population of ${Np} ${noun}, how many sample means would be in the sampling distribution?`,M.comb(Np,np),{tol:INT,dp:0,how:`Use the combination formula: =COMBIN(${Np},${np}) = ${nf(M.comb(Np,np))}`})]};
+});
+
+/* ---------- PART 2: SAMPLING DISTRIBUTION OF THE MEAN ---------- */
+def('sd_raw1',2,'Sampling error and standard error',()=>{
+  const c=ctxMean(), mu=pick(c.mu), sd=pick(c.sd), n=pick([20,24,25]);
+  const se0=sd/Math.sqrt(n), center=mu+pick([-1.8,-1.5,-1.2,-0.9,0.9,1.2,1.5,1.8,2.1])*se0;
+  const data=genData(n,c,center,sd), xb=mean(data), se=sd/Math.sqrt(n), z=(xb-mu)/se;
+  const gtX=Math.random()<.5, gtOne=Math.random()<.5;
+  const pX = gtX ? 1-M.cdf(z) : M.cdf(z), pO = gtOne ? 1-M.cdf((xb-mu)/sd) : M.cdf((xb-mu)/sd);
+  return {kind:'parts',dbg:{mu,sd,n,data,gtX,gtOne},title:c.title,
+    intro:`The ${c.avg} for ${c.pop} is known to be ${vin(c,mu)}, with a population standard deviation of ${vin(c,sd)}. ${c.org} sampled ${n} ${c.sample} and recorded ${c.rec}:`,
+    data:dataOf(c,data),
+    items:[
+     N('A',`What is the average of the ${n} ${c.sample} in the sample?`,xb,{tol:{abs:0.006+0.0005*Math.abs(xb)},dp:3,how:`=AVERAGE(data) = ${f3(xb)}`}),
+     N('B','What is the sampling error?',xb-mu,{tol:tolV(xb-mu),neg:true,dp:3,how:`Sample mean − population mean = ${f3(xb)} − ${mu} = ${f3(xb-mu)}`}),
+     N('C','Using the population data, what is the standard error?',se,{tol:tolSE(se),dp:3,how:`σ / √n = ${sd} / √${n} = ${f3(se)}`}),
+     N('D',`What is the probability of randomly getting a sample mean ${gtX?'GREATER':'LESS'} than the average of these ${n} ${c.sample}?`,pX,{tol:PRZ2,dp:4,how:`z = (${f3(xb)} − ${mu}) / ${f3(se)} = ${f3(z)}; ${gtX?'=1-NORM.S.DIST('+f3(z)+',TRUE)':'=NORM.S.DIST('+f3(z)+',TRUE)'} = ${pX.toFixed(4)}`}),
+     N('E',`If the sample average were the value for just 1 ${c.one}, what is the probability of randomly selecting a ${c.one} with a value ${gtOne?'GREATER':'LESS'} than the average calculated above?`,pO,{tol:PRZ2,dp:4,how:`z = (${f3(xb)} − ${mu}) / ${sd} = ${f3((xb-mu)/sd)}; ${gtOne?'=1-NORM.S.DIST('+f3((xb-mu)/sd)+',TRUE)':'=NORM.S.DIST('+f3((xb-mu)/sd)+',TRUE)'} = ${pO.toFixed(4)}`})]};
+});
+
+def('sd_raw2',2,'Sample mean versus a single value',()=>{
+  const c=ctxMean(), mu=pick(c.mu), sd=pick(c.sd), n=pick([30,33,36]);
+  const se=sd/Math.sqrt(n), center=mu+pick([-1.5,-1.2,-0.9,0.9,1.2,1.5])*se;
+  const data=genData(n,c,center,sd), xb=mean(data), zs=(xb-mu)/se, z1=(xb-mu)/sd;
+  const le=Math.random()<.5;
+  const pS=le?M.cdf(zs):1-M.cdf(zs), pO=le?M.cdf(z1):1-M.cdf(z1);
+  const w=le?'or less':'or more';
+  return {kind:'parts',dbg:{mu,sd,n,data,le},title:c.title,
+    intro:`The ${c.avg} for ${c.pop} is ${vin(c,mu)} with a population standard deviation of ${vin(c,sd)}. Assume the values are normally distributed. ${c.org} sampled ${n} ${c.sample}. The data (${c.rec}) are below:`,
+    data:dataOf(c,data),
+    items:[
+     N('A','What is the mean of the sample?',xb,{tol:{abs:0.006+0.0005*Math.abs(xb)},dp:3,how:`=AVERAGE(data) = ${f3(xb)}`}),
+     N('B',`What is the probability of getting a sample of ${n} ${c.sample} with this sample mean ${w}, compared to the population mean?`,pS,{tol:PRZ2,dp:4,how:`z = (${f3(xb)} − ${mu}) / (${sd}/√${n}) = ${f3(zs)}; =${le?'':'1-'}NORM.S.DIST(${f3(zs)},TRUE) = ${pS.toFixed(4)}`}),
+     N('C',`What is the z-value for a single ${c.one} with the same value as the sample mean, compared to the population mean?`,z1,{tol:{abs:0.01},neg:true,dp:3,how:`z = (${f3(xb)} − ${mu}) / ${sd} = ${f3(z1)}`}),
+     N('D',`What is the probability of choosing a single ${c.one} with that same value ${w}, compared to the population mean?`,pO,{tol:PRZ2,dp:4,how:`=${le?'':'1-'}NORM.S.DIST(${f3(z1)},TRUE) = ${pO.toFixed(4)}`})]};
+});
+
+def('sd_summ',2,'Sampling distribution with summary data',()=>{
+  const c=ctxMean(), mu=pick(c.mu), sd=pick(c.sd), n=pick([25,36,49,64,100]);
+  const se=sd/Math.sqrt(n), cl=(k)=>rd(mu+k*se,2);
+  const a=cl(pick([.5,1,1.5,2])), lo=cl(-pick([.5,1,1.5])), hi=cl(pick([.5,1,1.5]));
+  const za=(a-mu)/se, zl=(lo-mu)/se, zh=(hi-mu)/se;
+  const pa=1-M.cdf(za), pb=M.cdf(zh)-M.cdf(zl);
+  return {kind:'parts',dbg:{mu,sd,n,a,lo,hi},title:c.title,
+    intro:`The ${c.avg} for ${c.pop} is ${vin(c,mu)} with a standard deviation of ${vin(c,sd)}. ${c.org} will take a random sample of ${n} ${c.sample}.`,
+    items:[
+     N('A','What is the standard error of the sample mean?',se,{tol:tolSE(se),dp:3,how:`σ / √n = ${sd} / √${n} = ${f3(se)}`}),
+     N('B',`What is the probability that the sample mean is more than ${vtxt(c,a,2)}?`,pa,{tol:PRZ2,dp:4,how:`z = (${a} − ${mu}) / ${f3(se)} = ${f3(za)}; =1-NORM.S.DIST(${f3(za)},TRUE) = ${pa.toFixed(4)}`}),
+     N('C',`What is the probability that the sample mean is between ${vtxt(c,lo,2)} and ${vtxt(c,hi,2)}?`,pb,{tol:PRZ2,dp:4,how:`=NORM.S.DIST(${f3(zh)},TRUE)-NORM.S.DIST(${f3(zl)},TRUE) = ${pb.toFixed(4)}`}),
+     N('D',`If the sample size were 4 times as large (${4*n}), what would the standard error be?`,se/2,{tol:tolSE(se/2),dp:3,how:`${sd} / √${4*n} = ${f3(se/2)}. Four times the sample size cuts the standard error in half.`})]};
+});
+
+def('sd_t',2,'Sampling distribution when σ is unknown',()=>{
+  const c=ctxMean(), mu=pick(c.mu), s=pick(c.sd), n=pick([10,12,15,16,20,25]), df=n-1;
+  const se=s/Math.sqrt(n), xb=rd(mu+pick([-2,-1.5,-1,1,1.5,2])*se,2);
+  const err=xb-mu, t=err/se, pb=M.tcdf(t,df), pa=1-pb;
+  return {kind:'parts',dbg:{mu,s,n,xb},title:c.title,
+    intro:`The ${c.avg} for ${c.pop} is known to be ${vin(c,mu)}, but the population standard deviation is not known. ${c.org} sampled ${n} ${c.sample} and found a sample average of ${vtxt(c,xb,2)} with a sample standard deviation of ${vin(c,s)}.`,
+    items:[
+     N('A','What are the degrees of freedom?',df,{tol:INT,dp:0,how:`df = n − 1 = ${n} − 1 = ${df}`}),
+     N('B','What is the sampling error?',err,{tol:tolV(err),neg:true,dp:3,how:`x̄ − μ = ${xb} − ${mu} = ${f3(err)}`}),
+     N('C','What is the standard error?',se,{tol:tolSE(se),dp:3,how:`s / √n = ${s} / √${n} = ${f3(se)}`}),
+     N('D','What is the sample t score?',t,{tol:{abs:0.015},neg:true,dp:3,how:`sampling error / standard error = ${f3(err)} / ${f3(se)} = ${f3(t)}`}),
+     N('E','What is the probability of getting a sample mean below this one?',pb,{tol:{abs:0.002,rel:0.02},dp:4,how:`=T.DIST(${f3(t)},${df},TRUE) = ${pb.toFixed(4)}`}),
+     N('F','What is the probability of getting a sample mean above this one?',pa,{tol:{abs:0.002,rel:0.02},dp:4,how:`=1-T.DIST(${f3(t)},${df},TRUE) = ${pa.toFixed(4)}`})]};
+});
+
+/* ---------- PART 3: CONFIDENCE INTERVAL FOR A MEAN (σ KNOWN) ---------- */
+def('ci_zraw',3,'Confidence interval from raw data (σ known)',()=>{
+  const c=ctxMean(), mu=pick(c.mu), sd=pick(c.sd), n=pick([16,20,24]), conf=pick(CONFS);
+  const data=genData(n,c,mu+sd*pick([-.3,-.15,0,.15,.3]),sd), xb=mean(data);
+  const z=zc(conf), moe=z*sd/Math.sqrt(n), lo=xb-moe, hi=xb+moe, ch=interpMean(c,conf,lo,hi,xb);
+  return {kind:'parts',dbg:{sd,n,conf,data},title:c.title,
+    intro:`${c.org} wants to estimate ${c.est}. The population standard deviation is known to be ${vin(c,sd)}. They sampled ${n} ${c.sample} and recorded ${c.rec}:`,
+    data:dataOf(c,data),
+    items:[
+     N('A',`What is the average of the sample?`,xb,{tol:{abs:0.006+0.0005*Math.abs(xb)},dp:3,how:`=AVERAGE(data) = ${f3(xb)}`}),
+     N('B',`If ${orgL(c.org)} wants to be ${cp(conf)}% confident, what is the margin of error?`,moe,{tol:tolV(moe),dp:3,how:`E = z × (σ/√n) = ${z} × (${sd}/√${n}) = ${f3(moe)}`}),
+     N('C','What is the margin of error percentage?',moe/xb,{tol:{abs:0.0006},pct:true,dp:4,how:`${f3(moe)} / ${f3(xb)} = ${(moe/xb*100).toFixed(2)}%`}),
+     N('D','What is the lower limit of the interval?',lo,{tol:tolEnd(moe),dp:3,how:`${f3(xb)} − ${f3(moe)} = ${f3(lo)}`}),
+     N('E','What is the upper limit of the interval?',hi,{tol:tolEnd(moe),dp:3,how:`${f3(xb)} + ${f3(moe)} = ${f3(hi)}`}),
+     {...CH('F','How could you explain the results you got?',ch.choices,ch.ans,{how:`The interval estimates the population mean, so the statement must be about the average for ${c.pop}.`}), long:true}]};
+});
+
+def('ci_zsumm',3,'Confidence interval from summary data (σ known)',()=>{
+  const c=ctxMean(), mu=pick(c.mu), sd=pick(c.sd), n=pick([36,40,50,64,80,100]), conf=pick(CONFS);
+  const xb=rd(mu+sd*pick([-.15,-.1,0,.1,.15]),c.dp===0?1:2), z=zc(conf), se=sd/Math.sqrt(n), moe=z*se, lo=xb-moe, hi=xb+moe;
+  let claim, inside=Math.random()<.5;
+  for(let t=0;t<50;t++){ claim = rd(xb + (inside ? pick([-.6,-.3,.3,.6]) : pick([-1.7,-1.5,1.5,1.7,2.0]))*moe, 2); const ok = claim>lo+0.08*moe && claim<hi-0.08*moe, out = claim<lo-0.08*moe || claim>hi+0.08*moe; if(inside?ok:out) break; }
+  const isIn = claim>=lo && claim<=hi;
+  return {kind:'parts',dbg:{xb,sd,n,conf,claim},title:c.title,
+    intro:`${c.org} sampled ${n} ${c.sample} to estimate ${c.est}. The sample average was ${vtxt(c,xb,2)}. The population standard deviation is known to be ${vin(c,sd)}.`,
+    items:[
+     N('A','What is the standard error?',se,{tol:tolSE(se),dp:3,how:`σ / √n = ${sd} / √${n} = ${f3(se)}`}),
+     N('B',`What is the critical value for a ${cp(conf)}% confidence interval?`,z,{tol:{abs:0.012},dp:3,how:`From the formula sheet: 90% → 1.645, 95% → 1.96, 99% → 2.576.`}),
+     N('C',`What is the margin of error for ${cp(conf)}% confidence?`,moe,{tol:tolV(moe),dp:3,how:`E = z × (σ/√n) = ${z} × ${f3(se)} = ${f3(moe)}`}),
+     N('D','What is the lower limit of the interval?',lo,{tol:tolEnd(moe),dp:3,how:`${xb} − ${f3(moe)} = ${f3(lo)}`}),
+     N('E','What is the upper limit of the interval?',hi,{tol:tolEnd(moe),dp:3,how:`${xb} + ${f3(moe)} = ${f3(hi)}`}),
+     CH('F',`A manager claims the true ${c.avg} is ${vtxt(c,claim,2)}. Based on your interval, is that claim plausible?`,['Plausible (inside the interval)','Not plausible (outside the interval)'],isIn?0:1,{how:`The interval is ${f3(lo)} to ${f3(hi)}, and ${claim} is ${isIn?'inside':'outside'} it.`})]};
+});
+
+/* ---------- PART 4: CONFIDENCE INTERVAL FOR A MEAN (σ UNKNOWN) ---------- */
+def('ci_tsumm',4,'Confidence interval from summary data (σ unknown)',()=>{
+  const c=ctxMean(), n=pick([25,30,36,40,50,60]), conf=pick(CONFS), mu=pick(c.mu), s=pick(c.sd);
+  const xb=rd(mu+s*pick([-.2,-.1,0,.1,.2]),c.dp===0?1:2), df=n-1, tcv=tc(conf,df), se=s/Math.sqrt(n), moe=tcv*se, lo=xb-moe, hi=xb+moe;
+  const ch=interpMean(c,conf,lo,hi,xb);
+  return {kind:'parts',dbg:{xb,s,n,conf},title:c.title,
+    intro:`${c.org} wants to estimate ${c.est}. From a random sample of ${n} ${c.sample}, the average was ${vtxt(c,xb,2)} with a standard deviation of ${vin(c,s)} from the sample. The population standard deviation is not known.`,
+    items:[
+     CH('A','Which distribution should be used to find the critical value?',['Standard normal (z)','t distribution'],1,{how:'The population standard deviation is unknown, so use the t distribution with n − 1 degrees of freedom.'}),
+     N('B','What is the standard error?',se,{tol:tolSE(se),dp:3,how:`s / √n = ${s} / √${n} = ${f3(se)}`}),
+     N('C',`If ${orgL(c.org)} wants to be ${cp(conf)}% confident, what is the margin of error?`,moe,{tol:{abs:0.008+0.004*moe},dp:3,how:`=T.INV.2T(${al(conf)},${df}) = ${f3(tcv)}; ${f3(tcv)} × ${f3(se)} = ${f3(moe)}`}),
+     N('D','What is the margin of error percentage?',moe/xb,{tol:{abs:0.0006},pct:true,dp:4,how:`${f3(moe)} / ${xb} = ${(moe/xb*100).toFixed(2)}%`}),
+     {...CH('E','How could you explain the results you got?',ch.choices,ch.ans,{how:`The interval estimates the population mean, so the statement must be about the average for ${c.pop}.`}), long:true}]};
+});
+
+def('ci_traw',4,'Confidence interval from raw data (σ unknown)',()=>{
+  const c=ctxMean(), mu=pick(c.mu), sd=pick(c.sd), n=pick([12,15,18]), conf=pick([.90,.95,.99]);
+  const data=genData(n,c,mu+sd*pick([-.3,0,.3]),sd), xb=mean(data), s=sdS(data), df=n-1, tcv=tc(conf,df), se=s/Math.sqrt(n), moe=tcv*se, lo=xb-moe, hi=xb+moe;
+  return {kind:'parts',dbg:{data,conf},title:c.title,
+    intro:`${c.org} wants to estimate ${c.est}. The population standard deviation is not known. They sampled ${n} ${c.sample} and recorded ${c.rec}:`,
+    data:dataOf(c,data),
+    items:[
+     N('A','What is the sample average?',xb,{tol:{abs:0.006+0.0005*Math.abs(xb)},dp:3,how:`=AVERAGE(data) = ${f3(xb)}`}),
+     N('B','What is the sample standard deviation?',s,{tol:{abs:0.006+0.004*s},dp:3,how:`=STDEV.S(data) = ${f3(s)}`}),
+     N('C','What is the standard error?',se,{tol:tolSE(se),dp:3,how:`s / √n = ${f3(s)} / √${n} = ${f3(se)}`}),
+     N('D',`What is the margin of error for ${cp(conf)}% confidence?`,moe,{tol:{abs:0.01+0.006*moe},dp:3,how:`t = =T.INV.2T(${al(conf)},${df}) = ${f3(tcv)}; E = t × (s/√n) = ${f3(tcv)} × ${f3(se)} = ${f3(moe)}`}),
+     N('E','What is the lower limit of the interval?',lo,{tol:{abs:0.012+0.012*moe},dp:3,how:`${f3(xb)} − ${f3(moe)} = ${f3(lo)}`}),
+     N('F','What is the upper limit of the interval?',hi,{tol:{abs:0.012+0.012*moe},dp:3,how:`${f3(xb)} + ${f3(moe)} = ${f3(hi)}`})]};
+});
+
+/* ---------- PART 5: CONFIDENCE INTERVAL FOR A PROPORTION ---------- */
+def('ci_prop',5,'Confidence interval for a proportion',()=>{
+  const c=ctxProp(), n=pick([200,250,300,400,500,600]), conf=pick(CONFS);
+  const x=Math.round(n*pick([.18,.22,.27,.3,.35,.4,.45,.55,.6])), ph=x/n, z=zc(conf), moe=z*Math.sqrt(ph*(1-ph)/n), lo=ph-moe, hi=ph+moe, ch=interpProp(c,conf,lo,hi,ph);
+  return {kind:'parts',dbg:{n,x,conf},title:c.title,
+    intro:`${c.org} surveyed a random sample of ${n} ${c.sample}. Of those, ${x} said they ${c.act}.`,
+    items:[
+     N('A',`What is the proportion of ${c.sample} in the sample who said they ${c.act}?`,ph,{tol:{abs:0.0006},dp:4,how:`${x} / ${n} = ${ph.toFixed(4)}`}),
+     N('B',`Using a ${cp(conf)}% confidence level, what is the margin of error?`,moe,{tol:{abs:0.001+0.01*moe},dp:4,how:`z = ${z} (from the sheet); E = z × √(p(1 − p)/n) = ${z} × √(${ph.toFixed(4)} × ${(1-ph).toFixed(4)} / ${n}) = ${moe.toFixed(4)}`}),
+     N('C',`What is the lower limit of the ${cp(conf)}% confidence interval?`,lo,{tol:{abs:0.001+0.012*moe},dp:4,how:`${ph.toFixed(4)} − ${moe.toFixed(4)} = ${lo.toFixed(4)}`}),
+     N('D',`What is the upper limit of the ${cp(conf)}% confidence interval?`,hi,{tol:{abs:0.001+0.012*moe},dp:4,how:`${ph.toFixed(4)} + ${moe.toFixed(4)} = ${hi.toFixed(4)}`}),
+     {...CH('E','How would you interpret your results?',ch.choices,ch.ans,{how:`The interval estimates the population proportion, so the statement must be about ${c.pop}.`}), long:true}]};
+});
+
+def('ci_prop2',5,'Poll results and interval width',()=>{
+  const c=ctxProp(), n=pick([400,500,600,800,1000,1200]), pct=pick([32,38,42,47,52,56,61,64]), ph=pct/100, conf=pick(CONFS);
+  const z=zc(conf), se=Math.sqrt(ph*(1-ph)/n), moe=z*se, lo=ph-moe, hi=ph+moe;
+  let claim, inside=Math.random()<.5;
+  for(let t=0;t<60;t++){ claim = rd(ph + (inside ? pick([-.5,-.25,.25,.5]) : pick([-1.8,-1.5,1.5,1.8,2.2]))*moe, 2); const ok = claim>lo+0.1*moe && claim<hi-0.1*moe, out = claim<lo-0.1*moe || claim>hi+0.1*moe; if(inside?ok:out) break; }
+  const isIn = claim>=lo && claim<=hi;
+  return {kind:'parts',dbg:{n,ph,conf,claim},title:c.title,
+    intro:`In a random poll of ${n} ${c.sample}, ${pct}% said they ${c.act}.`,
+    items:[
+     N('A','What is the standard error of the sample proportion?',se,{tol:{abs:0.0004+0.01*se},dp:4,how:`√(p̂(1 − p̂) / n) = √(${ph} × ${(1-ph).toFixed(2)} / ${n}) = ${se.toFixed(4)}`}),
+     N('B',`What is the margin of error for ${cp(conf)}% confidence?`,moe,{tol:{abs:0.001+0.01*moe},dp:4,how:`${f3(z)} × ${se.toFixed(4)} = ${moe.toFixed(4)}`}),
+     N('C',`What is the total width of the ${cp(conf)}% confidence interval?`,2*moe,{tol:{abs:0.002+0.01*moe},dp:4,how:`2 × ${moe.toFixed(4)} = ${(2*moe).toFixed(4)}`}),
+     CH('D',`Someone says that ${fmtPct(claim).replace(/\.0%$/,'%')} of ${c.pop} ${c.act}. Based on your interval, is that plausible?`,['Plausible (inside the interval)','Not plausible (outside the interval)'],isIn?0:1,{how:`The interval is ${lo.toFixed(4)} to ${hi.toFixed(4)}, and ${claim.toFixed(2)} is ${isIn?'inside':'outside'} it.`}),
+     N('E',`If the poll had used ${4*n} ${c.sample} instead and found the same percentage, what would the margin of error be?`,moe/2,{tol:{abs:0.001+0.01*moe/2},dp:4,how:`Four times the sample size cuts the margin of error in half: ${moe.toFixed(4)} / 2 = ${(moe/2).toFixed(4)}`})]};
+});
+
+/* ---------- PART 6: SAMPLE SIZE ---------- */
+def('ss_mean',6,'Sample size for a mean',()=>{
+  const c=ctxMean(); let sd,E,conf,kind,n1,n2,sd2,E2,conf2;
+  for(let t=0;t<400;t++){
+    sd=pick(c.sd); E=pick(c.E); conf=pick(CONFS); kind=pick(['sd','moe','conf']);
+    sd2=sd; E2=E; conf2=conf;
+    if(kind==='sd') sd2=rd(sd*pick([1.25,1.5,2]),2);
+    else if(kind==='moe') E2=rd(E*pick([1.5,2]),3);
+    else conf2=pick(CONFS.filter(x=>x!==conf));
+    const calc1=z=>Math.pow(z*sd/E,2), calc2=zz=>Math.pow(zz*sd2/E2,2);
+    const f1=safeSize(calc1,conf);
+    const z2s=[zc(conf2),zExact(conf2),+zExact(conf2).toFixed(2)], r2=z2s.map(calc2), c2=r2.map(Math.ceil), fr2=r2[0]-Math.floor(r2[0]);
+    if(f1 && c2.every(x=>x===c2[0]) && fr2>0.03 && fr2<0.97){ n1=Math.ceil(calc1(zc(conf))); n2=c2[0]; if(n1<400&&n2<600&&n1!==n2) break; }
+  }
+  const second = kind==='sd' ? `Suppose ${orgL(c.org)} believed the variability was greater and changed its estimate of the standard deviation to ${vin(c,sd2)}. What is the new required sample size, keeping the margin of error and confidence level the same?`
+               : kind==='moe' ? `What would the new required sample size be if ${orgL(c.org)} decided to accept a margin of error of ${mTxt(c,E2)}, keeping the same confidence level?`
+               : `What would the new required sample size be if ${orgL(c.org)} wanted ${cp(conf2)}% confidence instead, keeping the same margin of error?`;
+  const how2 = `n = (z × σ / E)²: ${kind==='sd'?`z = ${f3(zc(conf))}, σ = ${sd2}, E = ${E}`:kind==='moe'?`z = ${f3(zc(conf))}, σ = ${sd}, E = ${E2}`:`z = ${f3(zc(conf2))}, σ = ${sd}, E = ${E}`}. Round up to ${n2}.`;
+  const ch=mkChoices('Raise the confidence level',['Raise the allowed margin of error','Lower the confidence level','Expect less variability (a smaller σ)']);
+  return {kind:'parts',dbg:{kind,sd,E,conf,sd2,E2,conf2},title:c.title,
+    intro:`${c.org} wants to estimate ${c.est}. They want the margin of error to be no greater than ${mTxt(c,E)} at a confidence level of ${cp(conf)}%. From earlier studies, they estimate the population standard deviation to be ${vin(c,sd)}.`,
+    items:[
+     N('A','Calculate the required sample size.',n1,{tol:INT,dp:0,how:`n = (z × σ / E)² = (${f3(zc(conf))} × ${sd} / ${E})² = ${f3(Math.pow(zc(conf)*sd/E,2))}. Always round up to ${n1}.`}),
+     N('B',second,n2,{tol:INT,dp:0,how:how2}),
+     {...CH('C','Which of these changes would INCREASE the required sample size?',ch.choices,ch.ans,{how:'A higher confidence level needs a larger critical value, which raises n.'}), long:true}]};
+});
+
+def('ss_prop',6,'Sample size for a proportion',()=>{
+  const c=ctxProp(); let p,E,conf,n1,n2;
+  for(let t=0;t<400;t++){
+    p=pick([.2,.25,.3,.35,.6,.7,.75]); E=pick([.03,.04,.05]); conf=pick(CONFS);
+    const k1=z=>z*z*p*(1-p)/(E*E), k2=z=>z*z*.25/(E*E);
+    if(safeSize(k1,conf) && safeSize(k2,conf)){ n1=Math.ceil(k1(zc(conf))); n2=Math.ceil(k2(zc(conf))); if(n1!==n2) break; }
+  }
+  const ch=mkChoices('Increase the allowed margin of error',['Increase the confidence level','Decrease the allowed margin of error','Choose an estimate of the proportion closer to .5']);
+  return {kind:'parts',dbg:{p,E,conf},title:c.title,
+    intro:`${c.org} plans a survey to estimate the proportion of ${c.pop} who ${c.act}. They want a margin of error no greater than ${(E*100).toFixed(0)} percentage points (${E}) at a confidence level of ${cp(conf)}%. From earlier surveys, they estimate the proportion to be about ${Math.round(p*100)}%.`,
+    items:[
+     N('A','Calculate the required sample size.',n1,{tol:INT,dp:0,how:`n = z² × p(1 − p) / E² = ${f3(zc(conf))}² × ${p} × ${(1-p).toFixed(2)} / ${E}² = ${f3(Math.pow(zc(conf),2)*p*(1-p)/(E*E))}. Round up to ${n1}.`}),
+     N('B','If they were unsure about the earlier estimate and wanted the most conservative approach, what proportion should they use?',0.5,{tol:{abs:0.001},dp:2,how:'p = .5 makes p(1 − p) as large as possible.'}),
+     N('C','Using the conservative proportion, what is the required sample size?',n2,{tol:INT,dp:0,how:`z² × .5 × .5 / E² = ${f3(Math.pow(zc(conf),2)*.25/(E*E))}. Round up to ${n2}.`}),
+     {...CH('D','If the team wanted to DECREASE the required sample size, which change could they make?',ch.choices,ch.ans,{how:'A larger allowed margin of error means a smaller sample is enough.'}), long:true}]};
+});
+
+/* ---------- PART 7: CHOOSING THE PROCEDURE ---------- */
+const PROB_OPTS=['Probability for a single observation (z distribution)','Probability for a single observation (t distribution)','Probability for a sample mean (z distribution)','Probability for a sample mean (t distribution)'];
+function probSituations(c){
+  const mu=pick(c.mu), sd=pick(c.sd), n=pick([16,25,36,49,64]), nt=pick([12,15,20,25]), dg=(c.dp===0?1:2);
+  const se=sd/Math.sqrt(n), lo=rd(mu-pick([.5,1,1.5])*sd,dg), hi=rd(mu+pick([.5,1,1.5])*sd,dg);
+  const xs=rd(mu+pick([-1,1])*pick([.5,1,1.5])*se,2), xt=rd(mu+pick([-1,1])*pick([.5,1,1.5])*sd/Math.sqrt(nt),2);
+  const oneBelow=rd(mu-pick([.5,1,1.5])*sd,dg), oneAbove=rd(mu+pick([.5,1,1.5])*sd,dg);
+  const how1='One observation: z = (x − μ) / σ, then NORM.S.DIST. A t score is not used for a single observation.';
+  const how2='Sample mean with σ known: z = (x̄ − μ) / (σ/√n), then NORM.S.DIST.';
+  const how3='Sample mean with only the sample standard deviation: t = (x̄ − μ) / (s/√n) with df = n − 1, then T.DIST.';
+  const base=`The ${c.avg} for ${c.pop} is ${vin(c,mu)}`;
+  return {
+    s1:[{text:`${base}, with a population standard deviation of ${vin(c,sd)}. What is the probability that one randomly selected ${c.one} has a value below ${vtxt(c,oneBelow)}?`,ans:PROB_OPTS[0],how:how1},
+        {text:`${base}, with a population standard deviation of ${vin(c,sd)}. What is the probability that one randomly selected ${c.one} has a value between ${vtxt(c,lo)} and ${vtxt(c,hi)}?`,ans:PROB_OPTS[0],how:how1},
+        {text:`${base}, with a population standard deviation of ${vin(c,sd)}. What is the probability that a single ${c.one} has a value above ${vtxt(c,oneAbove)}?`,ans:PROB_OPTS[0],how:how1}],
+    s2:[{text:`${base}, with a population standard deviation of ${vin(c,sd)}. ${c.org} takes a random sample of ${n} ${c.sample}. What is the probability that the sample average is ${xs>mu?'above':'below'} ${vtxt(c,xs,2)}?`,ans:PROB_OPTS[2],how:how2},
+        {text:`${base}, with a population standard deviation of ${vin(c,sd)}. What is the probability that the average of a random sample of ${n+Math.round(n/4)*0} ${c.sample} falls within ${vtxt(c,sd/Math.sqrt(n),2)} of ${vtxt(c,mu)}?`,ans:PROB_OPTS[2],how:how2}],
+    s3:[{text:`${base}, but the population standard deviation is not known. ${c.org} takes a random sample of ${nt} ${c.sample} and finds a sample standard deviation of ${vin(c,sd)}. What is the probability that the sample average is ${xt>mu?'above':'below'} ${vtxt(c,xt,2)}?`,ans:PROB_OPTS[3],how:how3},
+        {text:`${base}. For a random sample of ${nt} ${c.sample}, the average is ${vtxt(c,xt,2)} and the sample standard deviation is ${vin(c,sd)}. What is the probability of getting a sample average ${xt>mu?'this high or higher':'this low or lower'}?`,ans:PROB_OPTS[3],how:how3}]};
+}
+def('p_prob',7,'Choosing the right probability distribution',()=>{
+  const c=ctxMean(), S=probSituations(c);
+  const first=[pick(S.s1),pick(S.s2),pick(S.s3)];
+  const rest=shuffle([...S.s1,...S.s2,...S.s3].filter(x=>!first.includes(x))).slice(0,2);
+  const rows=shuffle([...first,...rest]);
+  return {kind:'match',title:'Match the Situation with the Procedure',
+    intro:'Match each situation to the procedure you would use. Choices can be used more than once or not at all.',
+    rows, bank:PROB_OPTS.slice()};
+});
+
+def('p_all',7,'Choosing the right procedure',()=>{
+  const c=ctxMean(), p=ctxProp(), n=pick([36,40,50,64,100]), nn=pick([200,300,400,500]), x=Math.round(nn*pick([.25,.3,.35,.4,.45]));
+  const mu=pick(c.mu), sd=pick(c.sd), E=pick(c.E), S=probSituations(c);
+  const P=['Confidence interval around a mean (σ known)','Confidence interval around a mean (σ unknown)','Confidence interval around a proportion','Needed sample size for a mean','Needed sample size for a proportion','Probability for a single observation (z distribution)','Probability for a sample mean (z distribution)','Probability for a sample mean (t distribution)'];
+  const defs=[
+    {text:`${c.org} samples ${n} ${c.sample} and finds the sample average. The population standard deviation is known to be ${vin(c,sd)}. They want an interval estimate of the ${c.avg} for ${c.pop}.`,ans:P[0],how:'σ is known, so use z. The margin of error is z × (σ/√n).'},
+    {text:`${c.org} samples ${n} ${c.sample} and finds the sample average and the sample standard deviation of ${vin(c,sd)}. The population standard deviation is not known. They want an interval estimate of the ${c.avg} for ${c.pop}.`,ans:P[1],how:'σ is unknown, so use the sample sd and t with df = n − 1. The margin of error is t × (s/√n).'},
+    {text:`${p.org} surveys ${nn} ${p.sample} and ${x} say they ${p.act}. They want an interval estimate of the share of ${p.pop} who ${p.act}.`,ans:P[2],how:'A yes/no result, so use the proportion interval.'},
+    {text:`${c.org} wants to know how many ${c.sample} to sample so the margin of error for the ${c.avg} is no more than ${vin(c,E)}. The standard deviation is known.`,ans:P[3],how:'n = ((z × σ) / E)², rounded up.'},
+    {text:`${p.org} wants to know how many ${p.sample} to survey so the margin of error for the share who ${p.act} is no more than 4 percentage points.`,ans:P[4],how:'n = p × (1 − p) × (z / E)², rounded up.'},
+    {...pick(S.s1),ans:P[5]},{...pick(S.s2),ans:P[6]},{...pick(S.s3),ans:P[7]}];
+  const rows = shuffle(sample(defs,5));
+  return {kind:'match',title:'Match the Situation with the Procedure',
+    intro:'Match each situation to the procedure you would use. Some choices will not be used.',
+    rows, bank:shuffle(P.slice())};
+});
+
+
+/* ============================================================
+   APP
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const S = { mode:'full', part:1, shuffle:false, qs:[], idx:0 };
+
+function buildExam(){
+  let chosen=[];
+  if (S.mode==='full'){
+    const quota={1:3,2:2,3:2,4:2,5:2,6:2,7:2};
+    for (const p of Object.keys(quota)) chosen.push(...sample(TEMPLATES.filter(t=>t.part==+p),quota[p]));
+  } else {
+    chosen = TEMPLATES.filter(t=>t.part===+S.part);
+  }
+  if (S.shuffle) chosen = shuffle(chosen);
+  else chosen.sort((a,b)=>a.part-b.part);
+  S.qs = chosen.map(t=>{
+    const q = t.build(); q.id=t.id; q.part=t.part; q.topic=t.topic;
+    q.status='open'; q.score=0; q.done=false; q.snap=null;
+    return q;
+  });
+  S.idx=0;
+}
+
+/* ---------- intro ---------- */
+(function initIntro(){
+  const sel=$('partSel');
+  for (const p of Object.keys(PARTS)){ const o=document.createElement('option'); o.value=p; o.textContent=`Part ${p}: ${PARTS[p]}`; sel.appendChild(o); }
+  const radios=[...document.querySelectorAll('input[name=mode]')];
+  const sync=()=>{ S.mode=radios.find(r=>r.checked).value; $('optFull').classList.toggle('sel',S.mode==='full'); $('optPart').classList.toggle('sel',S.mode==='part'); };
+  radios.forEach(r=>r.addEventListener('change',sync));
+  sel.addEventListener('focus',()=>{ radios[1].checked=true; sync(); });
+  sel.addEventListener('change',()=>{ radios[1].checked=true; sync(); S.part=+sel.value; });
+  $('startBtn').addEventListener('click',()=>{ S.part=+sel.value; S.shuffle=$('shuf').checked; startQuiz(); });
+})();
+
+function show(id){ ['intro','quiz','results'].forEach(x=>$(x).classList.toggle('hidden',x!==id)); window.scrollTo({top:0}); }
+function startQuiz(){ buildExam(); show('quiz'); renderBubbles(); renderQ(); }
+
+/* ---------- bubbles ---------- */
+function bubClass(q,i){
+  if (i===S.idx) return 'bub cur' + (q.done ? ' '+scoreClass(q) : '');
+  if (q.done) return 'bub '+scoreClass(q);
+  if (q.status==='skipped') return 'bub skip';
+  return 'bub';
+}
+function scoreClass(q){ return q.score>=0.999 ? 'full' : q.score<=0.001 ? 'zero' : 'part'; }
+function renderBubbles(){
+  const b=$('bubbles'); b.innerHTML='';
+  S.qs.forEach((q,i)=>{
+    const el=document.createElement('button'); el.type='button'; el.className=bubClass(q,i); el.textContent=i+1;
+    el.setAttribute('aria-label',`Question ${i+1}`); el.addEventListener('click',()=>{ S.idx=i; renderBubbles(); renderQ(); });
+    b.appendChild(el);
+  });
+}
+
+/* ---------- question rendering ---------- */
+function tableHTML(t){
+  return '<table class="data"><tr>'+t.head.map(h=>`<th>${h}</th>`).join('')+'</tr>'+t.rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</table>';
+}
+function renderQ(){
+  const q=S.qs[S.idx];
+  $('qtag').textContent=`Part ${q.part}`;
+  $('qcount').textContent=`${S.idx+1} of ${S.qs.length}`;
+  $('qtitle').textContent=q.title;
+  let body=`<p>${q.intro}</p>`;
+  if (q.table) body+=tableHTML(q.table);
+  if (q.data) body+='<div class="dgrid">'+q.data.map(v=>`<span>${v}</span>`).join('')+'</div><button type="button" class="copybtn" id="copyBtn">Copy data</button>';
+  if (q.hint) body+=`<div class="hint">${q.hint}</div>`;
+  $('qbody').innerHTML=body;
+  if (q.data){ $('copyBtn').addEventListener('click',()=>copyData(q)); }
+  const box=$('items'); box.innerHTML=''; box.className = q.done?'locked':'';
+  $('scorebar').innerHTML='';
+  if (q.kind==='match') q.rows.forEach((r,i)=>box.appendChild(matchRow(q,r,i)));
+  else if (q.kind==='multi') q.options.forEach((o,i)=>box.appendChild(multiRow(q,o,i)));
+  else q.items.forEach((it,i)=>box.appendChild(partRow(q,it,i)));
+  if (q.done) showFeedback(q,true);
+  renderButtons();
+  if (!q.done){ const first=box.querySelector('input.num,select.pick'); /* do not auto-focus on phones to avoid keyboard jump */ }
+}
+function copyData(q){
+  const txt=q.data.join('\n'), b=$('copyBtn'); const done=()=>{ b.textContent='Copied. Paste into Excel'; setTimeout(()=>{ if($('copyBtn')) $('copyBtn').textContent='Copy data'; },2200); };
+  const fallback=()=>{ const t=document.createElement('textarea'); t.value=txt; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(t); done(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done,fallback); else fallback();
+}
+function letterEl(t){ const l=document.createElement('div'); l.className='letter'; l.textContent=t; return l; }
+function matchRow(q,r,i){
+  const d=document.createElement('div'); d.className='item'; d.dataset.i=i;
+  const lab=document.createElement('div'); lab.className='lab'; lab.appendChild(letterEl(i+1));
+  const t=document.createElement('div'); t.className='txt'; t.textContent=r.text; lab.appendChild(t); d.appendChild(lab);
+  const w=document.createElement('div'); w.className='inwrap';
+  const s=document.createElement('select'); s.className='pick'; s.disabled=q.done;
+  s.innerHTML='<option value="">Choose…</option>'+q.bank.map(b=>`<option value="${b.replace(/"/g,'&quot;')}">${b}</option>`).join('');
+  if (q.saved && q.saved[i]!=null) s.value=q.saved[i];
+  s.addEventListener('change',()=>{ q.saved=q.saved||[]; q.saved[i]=s.value; });
+  w.appendChild(s); d.appendChild(w); return d;
+}
+function multiRow(q,o,i){
+  const l=document.createElement('label'); l.className='chk'+((q.saved&&q.saved[i])?' on':''); l.dataset.i=i;
+  const c=document.createElement('input'); c.type='checkbox'; c.disabled=q.done; c.checked=!!(q.saved&&q.saved[i]);
+  c.addEventListener('change',()=>{ q.saved=q.saved||[]; q.saved[i]=c.checked; l.classList.toggle('on',c.checked); });
+  const t=document.createElement('span'); t.textContent=o.text; l.appendChild(c); l.appendChild(t); return l;
+}
+function partRow(q,it,i){
+  const d=document.createElement('div'); d.className='item'; d.dataset.i=i;
+  if (it.pre){ const p=document.createElement('div'); p.innerHTML=it.pre; d.appendChild(p); }
+  const lab=document.createElement('div'); lab.className='lab'; lab.appendChild(letterEl(it.label));
+  const t=document.createElement('div'); t.className='txt'; t.textContent=it.text; lab.appendChild(t); d.appendChild(lab);
+  const w=document.createElement('div'); w.className='inwrap';
+  if (it.type==='num'){
+    const inp=document.createElement('input'); inp.className='num'; inp.type='text';
+    inp.inputMode = it.neg ? 'text' : 'decimal'; inp.autocomplete='off'; inp.autocapitalize='off'; inp.spellcheck=false;
+    inp.placeholder = it.neg ? 'e.g. −1.25' : (it.dp===0 ? 'whole number' : 'your answer'); inp.disabled=q.done;
+    if (q.saved && q.saved[i]!=null) inp.value=q.saved[i];
+    inp.addEventListener('input',()=>{ q.saved=q.saved||[]; q.saved[i]=inp.value; });
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); advanceFrom(inp); } });
+    w.appendChild(inp);
+  } else {
+    const g=document.createElement('div'); g.className='seg'+(it.long?' long':'');
+    it.choices.forEach((c,ci)=>{
+      const lb=document.createElement('label'); const r=document.createElement('input'); r.type='radio'; r.name=`q${S.idx}_${i}`; r.value=ci; r.disabled=q.done;
+      if (q.saved && q.saved[i]===ci){ r.checked=true; lb.classList.add('on'); }
+      r.addEventListener('change',()=>{ q.saved=q.saved||[]; q.saved[i]=ci; g.querySelectorAll('label').forEach(x=>x.classList.remove('on')); lb.classList.add('on'); });
+      lb.appendChild(r); lb.appendChild(document.createTextNode(c)); g.appendChild(lb);
+    });
+    w.appendChild(g);
+  }
+  d.appendChild(w); return d;
+}
+function advanceFrom(inp){
+  const all=[...$('items').querySelectorAll('input.num')]; const i=all.indexOf(inp);
+  if (i>=0 && i<all.length-1) all[i+1].focus(); else { inp.blur(); checkAnswer(); }
+}
+
+/* ---------- buttons ---------- */
+function renderButtons(){
+  const q=S.qs[S.idx], r=$('qbtns'); r.innerHTML='';
+  const mk=(txt,cls,fn)=>{ const b=document.createElement('button'); b.type='button'; b.className=cls; b.textContent=txt; b.addEventListener('click',fn); r.appendChild(b); };
+  if (!q.done){ mk('Check answer','btn-primary',checkAnswer); mk('Skip for now','btn-ghost',skipQ); }
+  else {
+    const left = S.qs.filter(x=>!x.done).length;
+    mk(left? 'Next question' : 'See results','btn-primary',nextQ);
+  }
+}
+function nextQ(){
+  const n=S.qs.length;
+  for (let k=1;k<=n;k++){ const j=(S.idx+k)%n; if(!S.qs[j].done){ S.idx=j; renderBubbles(); renderQ(); window.scrollTo({top:0,behavior:'smooth'}); return; } }
+  showResults();
+}
+function skipQ(){
+  const q=S.qs[S.idx]; q.status='skipped';
+  const left=S.qs.filter(x=>!x.done && x!==q);
+  if (!left.length){ renderBubbles(); confirmFinish(); return; }
+  nextQ();
+}
+document.addEventListener('keydown',e=>{
+  if (e.key==='Enter' && !$('quiz').classList.contains('hidden') && $('modal').classList.contains('hidden')){
+    const q=S.qs[S.idx]; const tag=(document.activeElement||{}).tagName;
+    if (q.done){ e.preventDefault(); nextQ(); }
+    else if (q.kind!=='parts' && tag!=='INPUT') { /* let selects work normally */ }
+  }
+});
+
+/* ---------- checking ---------- */
+function gather(q){
+  const box=$('items');
+  if (q.kind==='match') return q.rows.map((r,i)=>box.querySelector(`.item[data-i="${i}"] select`).value);
+  if (q.kind==='multi') return q.options.map((o,i)=>box.querySelector(`.chk[data-i="${i}"] input`).checked);
+  return q.items.map((it,i)=>{
+    const d=box.querySelector(`.item[data-i="${i}"]`);
+    if (it.type==='num') return d.querySelector('input.num').value;
+    const r=d.querySelector('input[type=radio]:checked'); return r? +r.value : null;
+  });
+}
+function checkAnswer(){
+  const q=S.qs[S.idx]; if(q.done) return;
+  const ans=gather(q); q.saved=ans;
+  let oks=[], disp=[], corr=[], how=[], labels=[];
+  if (q.kind==='match'){
+    q.rows.forEach((r,i)=>{ oks.push(ans[i]===r.ans); disp.push(ans[i]||'(no answer)'); corr.push(r.ans); how.push(r.how); labels.push(String(i+1)); });
+    q.score = oks.filter(Boolean).length / oks.length;
+  } else if (q.kind==='multi'){
+    q.options.forEach((o,i)=>{ oks.push(ans[i]===o.ans); disp.push(ans[i]?'Selected':'Not selected'); corr.push(o.ans?'Should be selected':'Should not be selected'); how.push(o.how); labels.push(String.fromCharCode(65+i)); });
+    const nTrue=q.options.filter(o=>o.ans).length;
+    const tp=q.options.filter((o,i)=>o.ans&&ans[i]).length, fpn=q.options.filter((o,i)=>!o.ans&&ans[i]).length;
+    q.score=Math.max(0,(tp-fpn)/nTrue);
+  } else {
+    q.items.forEach((it,i)=>{
+      let ok,dv,cv;
+      if (it.type==='num'){ const v=parseNum(ans[i]); ok=numOK(v,it.ans,it.tol) || (it.pct && numOK(v,it.ans*100,{abs:(it.tol.abs||0)*100,rel:(it.tol.rel||0)})); dv=ans[i]===''||ans[i]==null?'(no answer)':ans[i]; cv=formatAns(it); }
+      else { ok = ans[i]===it.ans; dv = ans[i]==null?'(no answer)':it.choices[ans[i]]; cv=it.choices[it.ans]; }
+      oks.push(ok); disp.push(dv); corr.push(cv); how.push(it.how); labels.push(it.label);
+    });
+    q.score = oks.filter(Boolean).length / oks.length;
+  }
+  q.oks=oks; q.disp=disp; q.corr=corr; q.how=how; q.labels=labels;
+  q.done=true; q.status='done';
+  $('items').className='locked';
+  lockInputs(); showFeedback(q,false); renderButtons(); renderBubbles();
+}
+function formatAns(it){
+  if (it.pct) return (it.ans*100).toFixed(2)+'%';
+  if (it.ans!==0 && Math.abs(it.ans)<0.0005 && it.dp>0) return it.ans.toPrecision(3);
+  const v = it.dp===0 ? Math.round(it.ans) : it.ans;
+  return it.dp===0 ? nf(v) : v.toFixed(it.dp).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'');
+}
+function lockInputs(){ $('items').querySelectorAll('input,select').forEach(x=>x.disabled=true); }
+function showFeedback(q,restoring){
+  const box=$('items');
+  const rows = q.kind==='match' ? q.rows.map((r,i)=>box.querySelector(`.item[data-i="${i}"]`))
+             : q.kind==='multi' ? q.options.map((o,i)=>box.querySelector(`.chk[data-i="${i}"]`))
+             : q.items.map((it,i)=>box.querySelector(`.item[data-i="${i}"]`));
+  rows.forEach((row,i)=>{
+    const old=row.querySelector('.fb'); if(old) old.remove();
+    const f=document.createElement('div'); f.className='fb '+(q.oks[i]?'ok':'bad');
+    const how = q.how[i] ? `<span class="how">${/[=]/.test(q.how[i]) ? q.how[i].replace(/(=[A-Z.]+\([^)]*\))/g,'<code>$1</code>') : q.how[i]}</span>` : '';
+    f.innerHTML = (q.oks[i] ? '✓ Correct' : `✗ Correct answer: <b>${escapeHTML(q.corr[i])}</b>`) + how;
+    if (q.kind==='multi'){ row.after(f); f.style.margin='-2px 0 8px 4px'; } else row.appendChild(f);
+  });
+  const frac = Math.round(q.score*100)/100;
+  const bar=document.createElement('div'); bar.className='scorebar '+scoreClass(q);
+  const parts=q.oks.length, right=q.oks.filter(Boolean).length;
+  bar.textContent = q.kind==='multi' ? `Score for this question: ${(q.score).toFixed(2)} of 1` : `${right} of ${parts} correct (${frac.toFixed(2)} of 1)`;
+  $('scorebar').innerHTML=''; $('scorebar').appendChild(bar);
+}
+function escapeHTML(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* ---------- finish + results ---------- */
+function openModal(html){ $('modalBox').innerHTML=html; $('modal').classList.remove('hidden'); }
+function closeModal(){ $('modal').classList.add('hidden'); }
+function confirmFinish(){
+  const left=S.qs.filter(q=>!q.done).length;
+  if (!left){ showResults(); return; }
+  openModal(`<h3>Finish now?</h3><p class="muted">${left} question${left>1?'s are':' is'} still unanswered and will count as zero.</p>
+    <div class="btn-row"><button class="btn-ghost" id="mBack">Go back</button><button class="btn-primary" id="mGo">Finish</button></div>`);
+  $('mBack').onclick=()=>{ closeModal(); const j=S.qs.findIndex(q=>!q.done); if(j>=0){ S.idx=j; renderBubbles(); renderQ(); } };
+  $('mGo').onclick=()=>{ closeModal(); showResults(); };
+}
+$('finishEarly').addEventListener('click',confirmFinish);
+
+function showResults(){
+  const tot=S.qs.length, pts=S.qs.reduce((s,q)=>s+(q.done?q.score:0),0), pct=Math.round(pts/tot*100);
+  const missed={};
+  S.qs.forEach(q=>{ const lost = q.done ? 1-q.score : 1; if(lost>0.001) missed[q.topic]=(missed[q.topic]||0)+lost; });
+  const topics=Object.entries(missed).sort((a,b)=>b[1]-a[1]);
+  const msg = pct>=90?'Outstanding. You are ready.':pct>=80?'Strong. Review the topics below and you are there.':pct>=70?'Solid start. A few topics need another pass.':'Keep going. Work through the review list and try again.';
+  const r=$('results'); r.innerHTML='';
+  const c=document.createElement('div'); c.className='card';
+  c.innerHTML=`<div class="eyebrow">RESULTS</div><div class="bigscore">${pts.toFixed(1)} / ${tot}</div><div class="pct">${pct}%</div><p style="margin:10px 0 0">${msg}</p>`;
+  r.appendChild(c);
+  const c2=document.createElement('div'); c2.className='card'; c2.style.marginTop='14px';
+  c2.innerHTML='<h2>Review these topics</h2>';
+  if(!topics.length) c2.innerHTML+='<p class="muted">Nothing to review. Perfect score.</p>';
+  topics.forEach(([t,v])=>{ const row=document.createElement('div'); row.className='topic-row'; row.innerHTML=`<span>${escapeHTML(t)}</span><span class="pill">${(Math.round(v*10)/10).toString()} missed</span>`; c2.appendChild(row); });
+  r.appendChild(c2);
+  const bad=S.qs.map((q,i)=>({q,i})).filter(({q})=>!q.done || q.score<0.999);
+  if (bad.length){
+    const c3=document.createElement('div'); c3.className='card'; c3.style.marginTop='14px'; c3.innerHTML='<h2>Questions to revisit</h2>';
+    bad.forEach(({q,i})=>{
+      const det=document.createElement('details'); det.className='rev';
+      const sm=document.createElement('summary'); sm.textContent=`${i+1}. ${q.title}${q.done?'':' (not answered)'}`; det.appendChild(sm);
+      const inner=document.createElement('div'); inner.className='inner';
+      const intro=document.createElement('div'); intro.style.margin='0 0 6px'; intro.innerHTML=q.intro; inner.appendChild(intro);
+      if (q.table){ const tw=document.createElement('div'); tw.innerHTML=tableHTML(q.table); inner.appendChild(tw); }
+      if (q.data){ const dw=document.createElement('div'); dw.className='dgrid'; dw.innerHTML=q.data.map(v=>`<span>${v}</span>`).join(''); inner.appendChild(dw); }
+      if (q.done){
+        q.oks.forEach((ok,k)=>{ if(ok) return;
+          const line=document.createElement('div'); line.className='revline';
+          const lbl = q.kind==='match' ? q.rows[k].text : q.kind==='multi' ? q.options[k].text : q.items[k].text;
+          const p=document.createElement('div'); p.textContent=`${q.labels[k]}. ${lbl}`; line.appendChild(p);
+          const y=document.createElement('div'); y.className='you'; y.textContent='You: '+q.disp[k]; line.appendChild(y);
+          const a=document.createElement('div'); a.className='corr'; a.textContent='Answer: '+q.corr[k]; line.appendChild(a);
+          if(q.how[k]){ const h=document.createElement('div'); h.className='muted'; h.textContent=q.how[k]; line.appendChild(h); }
+          inner.appendChild(line); });
+      } else {
+        const p=document.createElement('p'); p.className='muted'; p.textContent='You did not answer this one. Go back and try it with a fresh set of numbers.'; inner.appendChild(p);
+      }
+      det.appendChild(inner); c3.appendChild(det);
+    });
+    r.appendChild(c3);
+  }
+  const br=document.createElement('div'); br.className='btn-row';
+  const again=document.createElement('button'); again.className='btn-primary'; again.textContent='Try again with new numbers'; again.onclick=startQuiz;
+  const home=document.createElement('button'); home.className='btn-ghost'; home.textContent='Back to start'; home.onclick=()=>show('intro');
+  br.appendChild(again); br.appendChild(home); r.appendChild(br);
+  show('results');
+}
+
+/* test hooks (harmless; used for automated checks) */
+window.__U2 = { M, TEMPLATES, parseNum, numOK, S, buildExam, PARTS, THEME };
+</script>
+</body>
+</html>
